@@ -1,0 +1,18 @@
+# 运行时与工具产物
+python-embed/
+__pycache__/
+*.pyc
+logs/
+
+# 体积大的中间素材
+assets/frames_raw/
+assets/frames_staging/
+assets/frames_unused/
+assets/frames_backup/
+versions/
+*.tmp
+
+# 临时截图
+dbg.png
+petwin_live.png
+sz_crop.png

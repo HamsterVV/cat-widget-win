@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "actions": {
+    "walk": {
+      "frames_dir": "assets/frames/walk",
+      "mirror_dir": "assets/frames/walk_left",
+      "fps": 12,
+      "loop": true,
+      "weight": 100,
+      "mode": "random",
+      "duration_s": [
+        8,
+        20
+      ],
+      "move_px_per_loop": 414,
+      "bob_px": 0
+    },
+    "drink": {
+      "frames_dir": "assets/frames/drink",
+      "fps": 10,
+      "loop": false,
+      "weight": 0,
+      "mode": "reminder",
+      "duration_s": [
+        4.7,
+        4.7
+      ],
+      "bubble_text": "该喝水啦"
+    },
+    "lickpaw": {
+      "frames_dir": "assets/frames/lickpaw",
+      "fps": 10,
+      "loop": false,
+      "weight": 20,
+      "mode": "random",
+      "duration_s": [
+        4.7,
+        4.7
+      ]
+    },
+    "sleep": {
+      "frames_dir": "assets/frames/sleep",
+      "fps": 10,
+      "loop": false,
+      "tail_loop": 20,
+      "weight": 0,
+      "mode": "reminder",
+      "duration_s": [
+        25,
+        40
+      ],
+      "bubble_text": "该休息啦"
+    },
+    "look": {
+      "frames_dir": "assets/frames/look",
+      "fps": 10,
+      "loop": false,
+      "weight": 0,
+      "mode": "interaction",
+      "duration_s": [
+        6.1,
+        6.1
+      ]
+    }
+  },
+  "scheduler": {
+    "tick_s": 1
+  },
+  "bubble": {
+    "font_family": "Microsoft YaHei",
+    "font_size": 12,
+    "max_chars": 20,
+    "duration_s": 4
+  },
+  "display": {
+    "default_height_px": 120
+  },
+  "interaction": {
+    "drag_threshold_px": 8,
+    "min_visible_px": 40
+  },
+  "startup": {
+    "walk_in": false,
+    "end_x_ratio": 0.33
+  },
+  "layout": {
+    "drift": true,
+    "start_ratio": 0.08,
+    "end_ratio": 0.72,
+    "deadline": "17:00",
+    "exit_margin_s": 60
+  },
+  "render": {
+    "renderer": "petwin"
+  }
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>frame</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #000; overflow: hidden; }
+  canvas { display: block; }
+</style>
+<canvas id="c" width="1280" height="720"></canvas>
+<script>
+  // Renders one frame of the clip at ?t=<seconds> and leaves it on screen so a
+  // headless screenshot captures exactly that frame.
+  const t = parseFloat(new URLSearchParams(location.search).get('t') || '0');
+  const c = document.getElementById('c');
+  const ctx = c.getContext('2d');
+  const v = document.createElement('video');
+  v.muted = true;
+  v.playsInline = true;
+  v.preload = 'auto';
+  v.src = '../assets/frames_raw/poc_walk.mp4';
+  v.addEventListener('loadeddata', () => {
+    v.currentTime = Math.min(t, Math.max(0, (v.duration || 0) - 0.04));
+  });
+  v.addEventListener('seeked', () => {
+    ctx.drawImage(v, 0, 0, c.width, c.height);
+    document.body.dataset.ready = '1';
+  });
+</script>

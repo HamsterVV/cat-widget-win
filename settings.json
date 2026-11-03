@@ -1,0 +1,36 @@
+{
+  "height_px": 120,
+  "transition_s": 0.15,
+  "schedules": [
+    {
+      "start": "13:40",
+      "end": "12:00",
+      "reminders": {
+        "drink": 15
+      },
+      "bubble_text": {
+        "drink": "该喝水啦"
+      }
+    }
+  ],
+  "timing": {
+    "drink": {
+      "duration_s": [
+        4.7,
+        4.7
+      ]
+    },
+    "lickpaw": {
+      "duration_s": [
+        4.7,
+        4.7
+      ],
+      "weight": 20
+    }
+  },
+  "events": [],
+  "sleep_window": {
+    "start": "22:00",
+    "end": "07:00"
+  }
+}
