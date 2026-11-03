@@ -3,7 +3,6 @@
   "actions": {
     "walk": {
       "frames_dir": "assets/frames/walk",
-      "mirror_dir": "assets/frames/walk_left",
       "fps": 12,
       "loop": true,
       "weight": 100,

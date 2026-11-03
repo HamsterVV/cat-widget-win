@@ -12,6 +12,8 @@
 python-embed\pythonw.exe cat_widget.py
 ```
 
+17:00 之后启动会直接退出（当天已经收工），需要继续跑就改 `actions.json` 里的 `layout.deadline`。
+
 ## 交互
 
 | 操作 | 效果 |
@@ -28,28 +30,41 @@ python-embed\pythonw.exe cat_widget.py
 - 睡觉：在设定的时间段内一直趴着，到点自己起来
 - 动作之间是 0.15–0.3 秒交叉淡入，不会硬切
 
+## 目录
+
+```
+cat_widget.py          入口：装日志、开 DPI 感知、起窗口
+pet/
+  config.py            常量、设置校验、日志、DPI、路径
+  scheduler.py         时段与事件的调度器
+  frames.py            帧加载、躯干质心对齐、缓存
+  ui.py                气泡、自绘控件、设置面板
+  app.py               动作状态机、渲染循环、移动、交互
+  window.py            Win32 分层窗口渲染器（真 alpha）
+actions.json           动作定义（帧目录、fps、循环、时长、权重）
+settings.json          用户设置（提醒、睡觉时段、大小、淡入）
+assets/frames/         运行用精灵帧（walk / drink / lickpaw / sleep / look）
+tools/                 素材管线与版本工具（不参与运行）
+```
+
 ## 设置面板
 
 右键打开，可调：喝水间隔/时长、舔爪时长与概率、睡觉时间段、大小、切换淡入。保存后面板自动关闭并立即生效。
 
-## 目录
+## 素材管线
 
-```
-cat_widget.py        主程序（调度、状态机、渲染循环、设置面板）
-pet_window.py        Win32 分层窗口渲染器（真 alpha，无锯齿边缘）
-actions.json         动作定义（帧目录、fps、循环、时长、权重）
-settings.json        用户设置（提醒、睡觉时段、大小、淡入）
-ingest_frames.py     视频帧 → 抠图 → 归一化素材
-capture_frames.py    无头 Chrome 抽帧
-snapshot.py          版本快照打包
-assets/frames/       运行用精灵帧（walk / drink / lickpaw / sleep / look）
-```
+`tools/` 里的脚本只用于重新生成素材，运行宠物不需要它们：
 
-## 素材说明
+```bat
+python-embed\python.exe tools\capture_frames.py --video clip.mp4 --out frames --fps 10
+python-embed\python.exe tools\ingest_frames.py out_dir frames\*.png --height 384 --scale-ref frames\f00.png --canvas-height 384
+python-embed\python.exe tools\check_frames.py out_dir
+python-embed\python.exe tools\snapshot.py v2.3 "说明"
+```
 
 - 所有动作都来自同一只猫的同一张参考照片，用 `wan3.0-video` 生成绿幕视频后抽帧抠像，保证身份、机位、比例一致
 - 每帧按统一比例归一化并底边对齐，坐下、趴下、转头时大小不变
-- 透明通道为二值 alpha，配合分层窗口渲染，浅色背景下也不会有硬边
+- 素材统一 384px 高、二值 alpha；朝右显示时在加载阶段翻转，不再单独存一份镜像目录
 
 ## 已踩过的坑
 

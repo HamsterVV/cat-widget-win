@@ -18,7 +18,7 @@ import time
 import zipfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent   # project root
 OUT_DIR = ROOT / "versions"
 
 SKIP_DIRS = {"__pycache__", "python-embed", "versions"}
@@ -28,7 +28,7 @@ SKIP_UNDER = {
     "assets/frames_unused",
 }
 ROOT_GLOBS = ("*.py", "*.json", "*.bat")
-INCLUDE_DIRS = ("assets/frames", "assets/frames_backup", "tools", "logs")
+INCLUDE_DIRS = ("pet", "assets/frames", "tools", "logs")
 EXTRA_DOCS = {"assets/frames_staging/review/REPORT.md": "docs/REPORT.md"}
 
 
@@ -91,7 +91,7 @@ def main() -> int:
         print(f"FAIL integrity check at {bad}")
         return 1
 
-    key_files = [p for p in ("cat_widget.py", "pet_window.py", "actions.json", "settings.json")]
+    key_files = [p for p in ("cat_widget.py", "pet/app.py", "pet/window.py", "actions.json", "settings.json")]
     lines = [
         f"# {name}",
         "",
