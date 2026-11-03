@@ -31,12 +31,16 @@ def main() -> int:
     set_dpi_aware()
     actions, _ = load_json(ACTIONS_PATH, {"actions": {}})
     layout = actions.get("layout", {}) if isinstance(actions, dict) else {}
+    deadline = str(layout.get("deadline") or "").strip()
     if layout.get("drift"):
-        remaining = seconds_until(layout.get("deadline", "17:00"))
-        if remaining <= 0:
-            LOG.info("already past %s; staying hidden until tomorrow", layout.get("deadline"))
-            return 0
-        LOG.info("drift plan: %.1f hours until %s", remaining / 3600, layout.get("deadline"))
+        if not deadline:
+            LOG.info("no deadline configured; the pet stays visible")
+        else:
+            remaining = seconds_until(deadline)
+            if remaining <= 0:
+                LOG.info("already past %s; staying hidden until tomorrow", deadline)
+                return 0
+            LOG.info("drift plan: %.1f hours until %s", remaining / 3600, deadline)
     try:
         root = tk.Tk()
     except tk.TclError as exc:

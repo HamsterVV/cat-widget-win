@@ -86,7 +86,7 @@
     "drift": true,
     "start_ratio": 0.08,
     "end_ratio": 0.72,
-    "deadline": "17:00",
+    "deadline": null,
     "exit_margin_s": 60
   },
   "render": {

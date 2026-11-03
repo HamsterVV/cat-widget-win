@@ -12,7 +12,7 @@
 python-embed\pythonw.exe cat_widget.py
 ```
 
-17:00 之后启动会直接退出（当天已经收工），需要继续跑就改 `actions.json` 里的 `layout.deadline`。
+默认全天显示。把 `actions.json` 里的 `layout.deadline` 改成 `"17:00"` 这类时间，就会恢复"到点走出右边缘并退出"的作息；改回 `null` 则全天显示。
 
 ## 交互
 
@@ -24,7 +24,7 @@ python-embed\pythonw.exe cat_widget.py
 
 ## 行为
 
-- 默认一直在走路，从屏幕左侧 8% 起步，17:00 走出右边缘并退出
+- 默认一直在走路，从屏幕左侧 8% 起步；没有 deadline 时缓慢向右漂移并一直留在屏幕上
 - 喝水：按设定间隔提醒（默认 15 分钟）
 - 舔爪：走路结束后按概率随机触发
 - 睡觉：在设定的时间段内一直趴着，到点自己起来

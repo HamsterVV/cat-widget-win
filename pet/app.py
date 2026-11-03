@@ -101,7 +101,9 @@ class PetApp:
         self.startup_target = None
         self.layout = self.actions.get("layout", {}) if isinstance(self.actions, dict) else {}
         self.drift_enabled = bool(self.layout.get("drift", False))
-        self._exit_ts = time.monotonic() + seconds_until(self.layout.get("deadline", "17:00"))
+        deadline = str(self.layout.get("deadline") or "").strip()
+        self._deadline = deadline or None
+        self._exit_ts = time.monotonic() + seconds_until(deadline) if self._deadline else None
         self._exit_margin = float(self.layout.get("exit_margin_s", 60))
         self._settings_mtime = SETTINGS_PATH.stat().st_mtime if SETTINGS_PATH.exists() else 0.0
         self._saving = False
@@ -438,7 +440,7 @@ class PetApp:
         now = time.monotonic()
         # The exit run starts at the deadline and takes a couple of seconds to
         # carry the pet off the right edge, so only force-close well after it.
-        if self.drift_enabled and now >= self._exit_ts + EXIT_GRACE_S:
+        if self.drift_enabled and self._exit_ts is not None and now >= self._exit_ts + EXIT_GRACE_S:
             LOG.info("past the deadline by %.0fs; closing", EXIT_GRACE_S)
             self.quit_app()
             return
@@ -556,6 +558,10 @@ class PetApp:
         now = time.monotonic()
         left, _top, right, _bottom = self.work_area
         target = left + (right - left) * float(self.layout.get("end_ratio", 0.72))
+        if self._exit_ts is None:
+            # No daily deadline: ease towards the end position and stay on screen.
+            return max(0.0, (target - self._pos_x)
+                       / float(self.layout.get("drift_time_constant_s", 21600)))
         remaining = self._exit_ts - now - self._exit_margin
         if remaining <= 0:
             # Last stretch: aim past the right edge, so the cat walks out of the
@@ -579,10 +585,13 @@ class PetApp:
         self._pos_x += px_per_s * dt * self.direction
         x = int(round(self._pos_x))
         if self.drift_enabled:
-            if x >= right:                      # walked off the right edge: day over
+            if self._exit_ts is not None and x >= right:   # walked out: day over
                 LOG.info("reached the right edge; closing for the day")
                 self.quit_app()
                 return
+            if self._exit_ts is None and x + width > right:
+                x = right - width
+                self._pos_x = float(x)
         elif x <= left and self.direction < 0:
             self.direction = 1
             x = left
