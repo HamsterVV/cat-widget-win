@@ -374,8 +374,16 @@ class PetApp:
             self.bubble.show(bubble)
 
     def _cycle_phase(self, next_action: str) -> float:
-        """Where we are in the current cycle, so walk->run does not snap to frame 0."""
+        """Where we are in the current cycle, so walk->run does not snap to frame 0.
+
+        Only looping clips may inherit a phase: a one-shot clip restarted at its
+        own tail would sit on the last frame for the whole action, which reads as
+        a freeze (e.g. lickpaw following lickpaw).
+        """
         if not self.action or self.frame_index <= 0:
+            return 0.0
+        spec = self.actions.get("actions", {}).get(self.action, {})
+        if not spec.get("loop", True):
             return 0.0
         if self.frames.dir_for(next_action, self.direction) != self.frames.dir_for(self.action, self.direction):
             return 0.0
